@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School ERP Dashboard</title>
+    <link rel="stylesheet" href="STYLES.css">
+</head>
+<body>
+    <script>
+        // Check if the user is logged in before rendering the page
+        if (!localStorage.getItem('loggedInUser')) {
+            window.location.href = "LOGIN.html";
+        }
+    </script>
+
+    <aside class="sidebar">
+        <h2>School ERP</h2>
+        <nav>
+            <ul>
+                <li><a href="DASHBOARD.html">Dashboard</a></li>
+                <li><a href="STUDENT_MANAGEMENT.html">Student Management</a></li>
+                <li><a href="TEACHER_MANAGEMENT.html">Teacher Management</a></li>
+                <li><a href="CLASS_MANAGEMENT.html">Class Management</a></li>
+                <li><a href="ATTENDANCE.html">Attendance</a></li>
+                <li><a href="EXAM_MANAGEMENT.html">Exams & Grades</a></li>
+                <li><a href="MY_PROFILE.html">My Profile</a></li>
+                <li><a href="LOGIN.html">Logout</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <h1>Welcome, Administrator</h1>
+        <p>This is a dashboard overview. You can navigate through the different sections using the menu on the left.</p>
+
+        <div class="card">
+            <h2>Quick Stats</h2>
+            <p>Total Students: 500 | Total Teachers: 45 | Classes: 20</p>
+        </div>
+
+        <div class="card">
+            <h2>Recent Activities</h2>
+            <ul>
+                <li>New student enrolled: John Doe</li>
+                <li>Exam schedule updated for Grade 10</li>
+                <li>Attendance for today has been submitted</li>
+            </ul>
+        </div>
+    </main>
+</body>
+</html>

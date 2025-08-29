@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile</title>
+   <link rel="stylesheet" href="STYLES.css">
+</head>
+<body>
+    <script src="DATA.js"></script>
+    <script>
+        // Check if the user is logged in
+        if (!localStorage.getItem('loggedInUser')) {
+            window.location.href = "LOGIN.html";
+        }
+        
+        // Get the logged-in user's ID and role
+        const loggedInUserId = localStorage.getItem('loggedInUser');
+        const loggedInUserRole = localStorage.getItem('userRole');
+
+        // Function to update the profile details
+        function updateProfile(name, role, idOrNo, email) {
+            document.getElementById('profile-name').textContent = name;
+            document.getElementById('profile-role').textContent = role;
+            document.getElementById('profile-id').textContent = idOrNo;
+            document.getElementById('profile-email').textContent = email;
+        }
+
+        // Find the user based on their role
+        let userProfileData;
+        if (loggedInUserRole === 'student') {
+            userProfileData = students.find(student => student.admissionNo === loggedInUserId);
+            if (userProfileData) {
+                updateProfile(userProfileData.name, 'Student', userProfileData.admissionNo, userProfileData.email);
+            }
+        } else if (loggedInUserRole === 'teacher') {
+            userProfileData = teachers.find(teacher => teacher.employeeId === loggedInUserId);
+            if (userProfileData) {
+                updateProfile(userProfileData.name, 'Teacher', userProfileData.employeeId, userProfileData.email);
+            }
+        } else if (loggedInUserRole === 'administrator') {
+             userProfileData = users.find(user => user.username === loggedInUserId);
+             if (userProfileData) {
+                 updateProfile(userProfileData.username, 'Administrator', 'N/A', 'N/A');
+             }
+        } else {
+            // If the user role is not recognized, redirect to login
+            window.location.href = "LOGIN.html";
+        }
+    </script>
+
+    <aside class="sidebar">
+        <h2>School ERP</h2>
+        <nav>
+            <ul>
+                <li><a href="DASHBOARD.html">Dashboard</a></li>
+                <li><a href="STUDENT_MANAGEMENT.html">Student Management</a></li>
+                <li><a href="TEACHER_MANAGEMENT.html">Teacher Management</a></li>
+                <li><a href="CLASS_MANAGEMENT.html">Class Management</a></li>
+                <li><a href="ATTENDANCE.html">Attendance</a></li>
+                <li><a href="EXAM_MANAGEMENT.html">Exams & Grades</a></li>
+                <li><a href="MY_PROFILE.html">My Profile</a></li>
+                <li><a href="LOGIN.html">Logout</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <div class="profile-container">
+            <h1><span id="profile-welcome">My Profile</span></h1>
+            <div class="profile-card">
+                <div class="profile-info">
+                    <img src="https://via.placeholder.com/150" alt="User Profile Picture">
+                    <div class="profile-details">
+                        <h2><span id="profile-name"></span></h2>
+                        <p><strong>Role:</strong> <span id="profile-role"></span></p>
+                        <p><strong>ID/Admission No:</strong> <span id="profile-id"></span></p>
+                        <p><strong>Email:</strong> <span id="profile-email"></span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="profile-card profile-form-container">
+                <h2>Edit Profile</h2>
+                <form action="#">
+                    <div>
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name">
+                    </div>
+                    <div>
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email">
+                    </div>
+                    <button type="submit">Update Profile</button>
+                </form>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

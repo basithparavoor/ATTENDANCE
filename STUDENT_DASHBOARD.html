@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="STYLES.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <h2>School ERP</h2>
+        <nav>
+            <ul>
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="#">My Profile</a></li>
+                <li><a href="#">My Schedule</a></li>
+                <li><a href="#">My Grades</a></li>
+                <li><a href="#">Exams & Tests</a></li>
+                <li><a href="#">Logout</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <h1 id="student-name-heading"></h1>
+        <p>Welcome to your personalized student dashboard.</p>
+        
+        <div class="card">
+            <h2>Quick Stats</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3>Current Grade</h3>
+                    <p id="student-class"></p>
+                </div>
+                <div class="stat-item">
+                    <h3>Attendance</h3>
+                    <p>95%</p>
+                </div>
+                <div class="stat-item">
+                    <h3>GPA</h3>
+                    <p>3.8</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Upcoming Exams</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Exam Name</th>
+                        <th>Subject</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody id="exams-table-body">
+                    </tbody>
+            </table>
+        </div>
+    </main>
+
+ <script src="DATA.js"></script>
+<script>
+    // Get the logged-in user's ID from local storage
+    const loggedInUserId = localStorage.getItem('loggedInUser');
+
+    // Find the student in the 'students' array using their admission number (which is now their username)
+    const loggedInUser = students.find(student => student.admissionNo === loggedInUserId);
+
+    if (loggedInUser) {
+        document.getElementById('student-name-heading').textContent = `Welcome, ${loggedInUser.name}`;
+        document.getElementById('student-class').textContent = loggedInUser.class;
+        
+        const examsTableBody = document.getElementById('exams-table-body');
+        const relevantExams = exams.filter(exam => exam.class === loggedInUser.class);
+        
+        relevantExams.forEach(exam => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${exam.examName}</td>
+                <td>${exam.subject}</td>
+                <td>${exam.date}</td>
+            `;
+            examsTableBody.appendChild(row);
+        });
+    } else {
+        // If no user is logged in, redirect to the login page
+        window.location.href = "LOGIN.html";
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="STYLES.css">
+</head>
+<body>
+    <!-- Message box for displaying errors or success messages -->
+    <div id="message-box" class="message-box"></div>
+
+    <div class="login-container">
+        <h2>Admin Login</h2>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="user-id">User ID:</label>
+                <input type="text" id="user-id" name="user-id" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="button">Login</button>
+        </form>
+    </div>
+
+    <script src="DATA.js"></script>
+    <script>
+        // Use a message box instead of alert()
+        function showMessage(message) {
+            const messageBox = document.getElementById('message-box');
+            messageBox.textContent = message;
+            messageBox.style.display = 'block';
+            // Hide the message after 3 seconds
+            setTimeout(() => {
+                messageBox.style.display = 'none';
+            }, 3000);
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const userId = document.getElementById('user-id').value;
+            const password = document.getElementById('password').value;
+
+            // Find the user in the 'users' array with the 'administrator' role
+            const user = users.find(u => u.username === userId && u.role === 'administrator');
+
+            // Check if the user exists and the password matches
+            if (user && user.password === password) {
+                // Store the logged-in user's username for the dashboard page
+                localStorage.setItem('loggedInUser', userId);
+                localStorage.setItem('userRole', 'administrator');
+
+                // Redirect to the admin dashboard
+                window.location.href = "DASHBOARD.html";
+            } else {
+                showMessage("Invalid User ID or Password.");
+            }
+        });
+    </script>
+</body>
+</html>

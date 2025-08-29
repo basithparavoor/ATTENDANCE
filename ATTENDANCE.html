@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance</title>
+    <link rel="stylesheet" href="STYLES.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <h2>School ERP</h2>
+        <nav>
+            <ul>
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="#">Student Management</a></li>
+                <li><a href="#">Teacher Management</a></li>
+                <li><a href="#">Class Management</a></li>
+                <li><a href="#">Attendance</a></li>
+                <li><a href="#">Exams & Grades</a></li>
+                <li><a href="#">Logout</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <h1>Attendance</h1>
+        
+        <div class="card">
+            <h2>Today's Attendance for Grade 10A</h2>
+            <form class="attendance-form">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Admission No.</th>
+                            <th>Name</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>S001</td>
+                            <td>John Doe</td>
+                            <td>
+                                <input type="radio" name="S001-status" value="present" checked> Present
+                                <input type="radio" name="S001-status" value="absent"> Absent
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>S002</td>
+                            <td>Jane Doe</td>
+                            <td>
+                                <input type="radio" name="S002-status" value="present" checked> Present
+                                <input type="radio" name="S002-status" value="absent"> Absent
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button type="submit">Submit Attendance</button>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

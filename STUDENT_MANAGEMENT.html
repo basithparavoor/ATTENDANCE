@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management</title>
+   <link rel="stylesheet" href="STYLES.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <h2>School ERP</h2>
+        <nav>
+            <ul>
+               <li><a href="DASHBOARD.html">Dashboard</a></li>
+                <li><a href="STUDENT_MANAGEMENT.html">Student Management</a></li>
+                <li><a href="TEACHER_MANAGEMENT.html">Teacher Management</a></li>
+                <li><a href="CLASS_MANAGEMENT.html">Class Management</a></li>
+                <li><a href="ATTENDANCE.html">Attendance</a></li>
+                <li><a href="EXAM_MANAGEMENT.html">Exams & Grades</a></li>
+                <li><a href="MY_PROFILE.html">My Profile</a></li>
+                <li><a href="LOGIN.html">Logout</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <h1>Student Management</h1>
+        <p>List of all students in the school.</p>
+        
+        <div class="card">
+            <h2>Add New Student</h2>
+            <form class="form-container">
+                <input type="text" placeholder="Student Name" required>
+                <input type="text" placeholder="Admission Number" required>
+                <select required>
+                    <option value="">Select Class</option>
+                    <option value="10">Grade 10</option>
+                    <option value="9">Grade 9</option>
+                </select>
+                <input type="email" placeholder="Email Address">
+                <button type="submit">Add Student</button>
+            </form>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Admission No.</th>
+                    <th>Name</th>
+                    <th>Class</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>S001</td>
+                    <td>John Doe</td>
+                    <td>Grade 10</td>
+                    <td>john.doe@school.edu</td>
+                    <td class="action-links">
+                        <div class="action-buttons">
+                            <a href="#">View Profile</a>
+                            <a href="#">Edit</a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>S002</td>
+                    <td>Jane Doe</td>
+                    <td>Grade 9</td>
+                    <td>jane.doe@school.edu</td>
+                    <td class="action-links">
+                        <div class="action-buttons">
+                            <a href="#">View Profile</a>
+                            <a href="#">Edit</a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+</body>
+</html>

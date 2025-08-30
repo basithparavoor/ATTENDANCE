@@ -7,9 +7,7 @@
     <link rel="stylesheet" href="STYLES.css">
 </head>
 <body>
-    <!-- Message box for displaying errors or success messages -->
     <div id="message-box" class="message-box"></div>
-
     <div class="login-container">
         <h2>Student Login</h2>
         <form id="loginForm">
@@ -24,39 +22,33 @@
             <button type="submit" class="button">Login</button>
         </form>
     </div>
-
-    <script src="DATA.js"></script>
     <script>
-        // Use a message box instead of alert()
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbw1t_ljhXOQsoN0mnpamRSqoPILBvPpmnvhkEw0l3_p8MJMGKg9cMyP3_M23__QxWgfXw/exec';
         function showMessage(message) {
             const messageBox = document.getElementById('message-box');
             messageBox.textContent = message;
             messageBox.style.display = 'block';
-            // Hide the message after 3 seconds
             setTimeout(() => {
                 messageBox.style.display = 'none';
             }, 3000);
         }
-
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
+        document.getElementById('loginForm').addEventListener('submit', async function(event) {
             event.preventDefault();
-
             const userId = document.getElementById('user-id').value;
             const password = document.getElementById('password').value;
-
-            // Find the user in the 'users' array with the 'student' role
-            const user = users.find(u => u.username === userId && u.role === 'student');
-
-            // Check if the user exists and the password matches
-            if (user && user.password === password) {
-                // Store the logged-in user's username for the dashboard page
-                localStorage.setItem('loggedInUser', userId);
-                localStorage.setItem('userRole', 'student');
-
-                // Redirect to the student dashboard
-                window.location.href = "STUDENT_DASHBOARD.html";
-            } else {
-                showMessage("Invalid User ID or Password.");
+            try {
+                const response = await fetch(`${scriptURL}?action=getUsers&role=student&username=${encodeURIComponent(userId)}&password=${encodeURIComponent(password)}`);
+                const result = await response.json();
+                if (result.users) {
+                    localStorage.setItem('loggedInUser', userId);
+                    localStorage.setItem('userRole', 'student');
+                    window.location.href = "STUDENT_DASHBOARD.html";
+                } else {
+                    showMessage("Invalid User ID or Password.");
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showMessage("An error occurred. Please try again.");
             }
         });
     </script>

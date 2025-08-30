@@ -30,7 +30,7 @@
             <div class="stats-grid">
                 <div class="stat-item">
                     <h3>Current Grade</h3>
-                    <p id="student-class"></p>
+                    <p id="student-class">Loading...</p>
                 </div>
                 <div class="stat-item">
                     <h3>Attendance</h3>
@@ -42,7 +42,7 @@
                 </div>
             </div>
         </div>
-
+        
         <div class="card">
             <h2>Upcoming Exams</h2>
             <table>
@@ -54,39 +54,67 @@
                     </tr>
                 </thead>
                 <tbody id="exams-table-body">
-                    </tbody>
+                </tbody>
             </table>
         </div>
     </main>
 
- <script src="DATA.js"></script>
 <script>
-    // Get the logged-in user's ID from local storage
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzDvGPCnsWEPUE-hRS1MhhCPlK19u5KAomHM_bt1MN9jrtNv4l3ZAXiVPG7CVNXECQJ/exec';
     const loggedInUserId = localStorage.getItem('loggedInUser');
 
-    // Find the student in the 'students' array using their admission number (which is now their username)
-    const loggedInUser = students.find(student => student.admissionNo === loggedInUserId);
-
-    if (loggedInUser) {
-        document.getElementById('student-name-heading').textContent = `Welcome, ${loggedInUser.name}`;
-        document.getElementById('student-class').textContent = loggedInUser.class;
-        
-        const examsTableBody = document.getElementById('exams-table-body');
-        const relevantExams = exams.filter(exam => exam.class === loggedInUser.class);
-        
-        relevantExams.forEach(exam => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${exam.examName}</td>
-                <td>${exam.subject}</td>
-                <td>${exam.date}</td>
-            `;
-            examsTableBody.appendChild(row);
-        });
-    } else {
-        // If no user is logged in, redirect to the login page
+    // Check if the user is logged in
+    if (!loggedInUserId) {
         window.location.href = "LOGIN.html";
     }
+
+    async function fetchStudentData() {
+        try {
+            // Fetch students and exams data
+            const [studentsRes, examsRes] = await Promise.all([
+                fetch(`${scriptURL}?action=getStudents`),
+                fetch(`${scriptURL}?action=getExams`)
+            ]);
+            
+            const studentsData = await studentsRes.json();
+            const examsData = await examsRes.json();
+            
+            // Find the logged-in student's data
+            const loggedInStudent = studentsData.students.find(student => student.AdmissionNumber === loggedInUserId);
+            
+            if (loggedInStudent) {
+                document.getElementById('student-name-heading').textContent = `Welcome, ${loggedInStudent.StudentName}`;
+                document.getElementById('student-class').textContent = loggedInStudent.Class;
+                
+                // Filter exams relevant to the student's class
+                const relevantExams = examsData.exams.filter(exam => exam.Class === loggedInStudent.Class);
+                
+                const examsTableBody = document.getElementById('exams-table-body');
+                examsTableBody.innerHTML = ''; // Clear existing content
+                
+                relevantExams.forEach(exam => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${exam.ExamName}</td>
+                        <td>${exam.Subject}</td>
+                        <td>${exam.Date}</td>
+                    `;
+                    examsTableBody.appendChild(row);
+                });
+            } else {
+                console.error('Logged-in student not found.');
+                document.getElementById('student-name-heading').textContent = 'User Not Found';
+                document.getElementById('student-class').textContent = 'N/A';
+            }
+        } catch (error) {
+            console.error('Error fetching student data:', error);
+            document.getElementById('student-name-heading').textContent = 'Error Loading Data';
+            document.getElementById('student-class').textContent = 'N/A';
+        }
+    }
+
+    // Call the function to load the data when the page loads
+    fetchStudentData();
 </script>
 </body>
 </html>

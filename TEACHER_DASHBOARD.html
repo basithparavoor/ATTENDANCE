@@ -32,11 +32,11 @@
             <div class="stats-grid">
                 <div class="stat-item">
                     <h3>Assigned Classes</h3>
-                    <p id="assigned-classes"></p>
+                    <p id="assigned-classes">Loading...</p>
                 </div>
                 <div class="stat-item">
                     <h3>Total Students</h3>
-                    <p id="total-students"></p>
+                    <p id="total-students">Loading...</p>
                 </div>
                 <div class="stat-item">
                     <h3>Upcoming Lessons</h3>
@@ -44,61 +44,85 @@
                 </div>
             </div>
         </div>
-
+        
         <div class="card">
             <h2>Submit Student Grades</h2>
             <p>Select a class and subject to enter grades.</p>
             <form action="#" class="form-container">
-                <select name="class" id="class-select" required>
+                <select id="class-select" name="class">
                     <option value="">Select a Class</option>
                 </select>
-                <select name="subject" id="subject-select" required>
+                <select id="subject-select" name="subject">
                     <option value="">Select a Subject</option>
                 </select>
-                <button type="submit">Go to Grade Sheet</button>
+                <button type="submit">View Student Grades</button>
             </form>
         </div>
-
-        <div class="card">
-            <h2>Recent Activities</h2>
-            <ul>
-                <li>Grades for Mathematics Test (Grade 10 A) successfully submitted.</li>
-                <li>Attendance for today has been marked for all your classes.</li>
-                <li>New student, Emily Chen, added to Grade 10 B.</li>
-            </ul>
-        </div>
     </main>
-    <script src="DATA.js"></script>
-    <script>
-        // Assuming we are logged in as a teacher with employee ID T001
-        const loggedInTeacher = teachers.find(teacher => teacher.employeeId === "T001");
-        
-        if (loggedInTeacher) {
-            document.getElementById('teacher-name-heading').textContent = `Welcome, ${loggedInTeacher.name}`;
+
+<script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzDvGPCnsWEPUE-hRS1MhhCPlK19u5KAomHM_bt1MN9jrtNv4l3ZAXiVPG7CVNXECQJ/exec';
+    const loggedInUserId = localStorage.getItem('loggedInUser');
+
+    // Check if the user is logged in
+    if (!loggedInUserId) {
+        window.location.href = "LOGIN.html";
+    }
+
+    async function fetchTeacherData() {
+        try {
+            // Fetch teachers and classes data
+            const [teachersRes, classesRes] = await Promise.all([
+                fetch(`${scriptURL}?action=getTeachers`),
+                fetch(`${scriptURL}?action=getClasses`)
+            ]);
+
+            const teachersData = await teachersRes.json();
+            const classesData = await classesRes.json();
+
+            const loggedInTeacher = teachersData.teachers.find(teacher => teacher.EmployeeID === loggedInUserId);
             
-            const assignedClasses = classes.filter(cls => cls.assignedTeacher === loggedInTeacher.name);
-            document.getElementById('assigned-classes').textContent = assignedClasses.length;
+            if (loggedInTeacher) {
+                document.getElementById('teacher-name-heading').textContent = `Welcome, ${loggedInTeacher.TeacherName}`;
 
-            const totalStudents = assignedClasses.reduce((sum, cls) => sum + cls.numberOfStudents, 0);
-            document.getElementById('total-students').textContent = totalStudents;
+                const assignedClasses = classesData.classes.filter(cls => cls.AssignedTeacher === loggedInTeacher.TeacherName);
+                document.getElementById('assigned-classes').textContent = assignedClasses.length;
 
-            const classSelect = document.getElementById('class-select');
-            assignedClasses.forEach(cls => {
+                const totalStudents = assignedClasses.reduce((sum, cls) => sum + cls.NumberofStudents, 0);
+                document.getElementById('total-students').textContent = totalStudents;
+
+                const classSelect = document.getElementById('class-select');
+                assignedClasses.forEach(cls => {
+                    const option = document.createElement('option');
+                    option.value = cls.ClassName + '-' + cls.Section;
+                    option.textContent = cls.ClassName + ' ' + cls.Section;
+                    classSelect.appendChild(option);
+                });
+
+                const subjectSelect = document.getElementById('subject-select');
+                // Assume the subject dropdown should be populated based on the teacher's subject
                 const option = document.createElement('option');
-                option.value = `${cls.className}-${cls.section}`;
-                option.textContent = `${cls.className} ${cls.section}`;
-                classSelect.appendChild(option);
-            });
-
-            const subjectSelect = document.getElementById('subject-select');
-            const subjects = [...new Set(teachers.map(t => t.subject))];
-            subjects.forEach(subject => {
-                const option = document.createElement('option');
-                option.value = subject.toLowerCase();
-                option.textContent = subject;
+                option.value = loggedInTeacher.SubjectTaught;
+                option.textContent = loggedInTeacher.SubjectTaught;
                 subjectSelect.appendChild(option);
-            });
+
+            } else {
+                console.error('Logged-in teacher not found.');
+                document.getElementById('teacher-name-heading').textContent = 'User Not Found';
+                document.getElementById('assigned-classes').textContent = 'N/A';
+                document.getElementById('total-students').textContent = 'N/A';
+            }
+
+        } catch (error) {
+            console.error('Error fetching teacher data:', error);
+            document.getElementById('teacher-name-heading').textContent = 'Error Loading Data';
+            document.getElementById('assigned-classes').textContent = 'N/A';
+            document.getElementById('total-students').textContent = 'N/A';
         }
-    </script>
+    }
+
+    // Call the function to load the data when the page loads
+    fetchTeacherData();
+</script>
 </body>
 </html>

@@ -36,7 +36,20 @@
 
         <div class="card">
             <h2>Quick Stats</h2>
-            <p>Total Students: 500 | Total Teachers: 45 | Classes: 20</p>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3>Total Students</h3>
+                    <p id="total-students">Loading...</p>
+                </div>
+                <div class="stat-item">
+                    <h3>Total Teachers</h3>
+                    <p id="total-teachers">Loading...</p>
+                </div>
+                <div class="stat-item">
+                    <h3>Total Classes</h3>
+                    <p id="total-classes">Loading...</p>
+                </div>
+            </div>
         </div>
 
         <div class="card">
@@ -48,5 +61,38 @@
             </ul>
         </div>
     </main>
+    
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbzDvGPCnsWEPUE-hRS1MhhCPlK19u5KAomHM_bt1MN9jrtNv4l3ZAXiVPG7CVNXECQJ/exec';
+        
+        async function fetchDashboardStats() {
+            try {
+                // Fetch data for all three sections in parallel
+                const [studentsRes, teachersRes, classesRes] = await Promise.all([
+                    fetch(`${scriptURL}?action=getStudents`),
+                    fetch(`${scriptURL}?action=getTeachers`),
+                    fetch(`${scriptURL}?action=getClasses`)
+                ]);
+                
+                const studentsData = await studentsRes.json();
+                const teachersData = await teachersRes.json();
+                const classesData = await classesRes.json();
+
+                // Update the dashboard elements with the fetched data
+                document.getElementById('total-students').textContent = studentsData.students.length;
+                document.getElementById('total-teachers').textContent = teachersData.teachers.length;
+                document.getElementById('total-classes').textContent = classesData.classes.length;
+
+            } catch (error) {
+                console.error('Error fetching dashboard stats:', error);
+                document.getElementById('total-students').textContent = 'N/A';
+                document.getElementById('total-teachers').textContent = 'N/A';
+                document.getElementById('total-classes').textContent = 'N/A';
+            }
+        }
+
+        // Call the function to load the data when the page loads
+        fetchDashboardStats();
+    </script>
 </body>
 </html>

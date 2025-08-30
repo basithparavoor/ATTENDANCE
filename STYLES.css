@@ -15,7 +15,7 @@ body {
     background-color: #2c3e50;
     color: #ecf0f1;
     padding: 20px;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     transition: width 0.3s ease;
@@ -69,14 +69,14 @@ body {
     background-color: #fff;
     padding: 30px;
     border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     margin-bottom: 30px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
 }
 
 .card h2 {
@@ -94,7 +94,9 @@ body {
     gap: 15px;
 }
 
-.form-container input, .form-container select, .form-container button {
+.form-container input,
+.form-container select,
+.form-container button {
     width: 100%;
     padding: 12px;
     border-radius: 6px;
@@ -103,7 +105,8 @@ body {
     font-size: 1rem;
 }
 
-.form-container input:focus, .form-container select:focus {
+.form-container input:focus,
+.form-container select:focus {
     outline: none;
     border-color: #3498db;
     box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
@@ -130,7 +133,8 @@ table {
     margin-top: 20px;
 }
 
-th, td {
+th,
+td {
     border: 1px solid #e0e0e0;
     padding: 15px;
     text-align: left;
@@ -157,16 +161,24 @@ tr:hover {
     background-color: #fff;
     padding: 50px;
     border-radius: 12px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
     width: 350px;
     text-align: center;
     animation: fadeIn 1s ease-in-out;
-    margin: auto; /* This centers the container horizontally */
+    margin: auto;
+    /* This centers the container horizontally */
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .login-container h2 {
@@ -177,7 +189,7 @@ tr:hover {
 /* Profile Page Specific Styles */
 .profile-info img {
     border: 4px solid #fff;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .profile-info p {
@@ -187,7 +199,7 @@ tr:hover {
 
 .profile-card.profile-form-container {
     background-color: #fff;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
 /* Utility classes for balance and actions */
@@ -204,7 +216,7 @@ tr:hover {
     background-color: #fff;
     padding: 25px;
     border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
 .outstanding {
@@ -212,7 +224,8 @@ tr:hover {
     color: white;
 }
 
-.outstanding h3, .outstanding p {
+.outstanding h3,
+.outstanding p {
     color: white;
 }
 
@@ -235,13 +248,15 @@ tr:hover {
         height: auto;
         position: static;
     }
+
     .main-content {
         padding: 20px;
     }
+
     .balance-summary {
         flex-direction: column;
     }
-    
+
     /* New styles for responsive action links */
     .action-links {
         display: flex;
@@ -267,6 +282,7 @@ tr:hover {
         text-decoration: none;
     }
 }
+
 /* Stats Grid */
 .stats-grid {
     display: grid;
@@ -280,7 +296,7 @@ tr:hover {
     padding: 20px;
     border-radius: 8px;
     text-align: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     transition: transform 0.3s ease;
 }
 

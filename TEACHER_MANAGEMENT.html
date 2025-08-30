@@ -29,11 +29,12 @@
         
         <div class="card">
             <h2>Add New Teacher</h2>
-            <form class="form-container">
-                <input type="text" placeholder="Teacher Name" required>
-                <input type="text" placeholder="Employee ID" required>
-                <input type="email" placeholder="Email Address">
-                <input type="text" placeholder="Subject Taught">
+            <form id="add-teacher-form" class="form-container">
+                <input type="text" id="teacher-name" name="TeacherName" placeholder="Teacher Name" required>
+                <input type="text" id="employee-id" name="EmployeeID" placeholder="Employee ID" required>
+                <input type="text" id="subject-taught" name="SubjectTaught" placeholder="Subject Taught">
+                <input type="email" id="teacher-email" name="Email" placeholder="Email Address">
+                <input type="password" id="teacher-password" name="Password" placeholder="Password" required>
                 <button type="submit">Add Teacher</button>
             </form>
         </div>
@@ -48,33 +49,66 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>T001</td>
-                    <td>Jane Smith</td>
-                    <td>Mathematics</td>
-                    <td>jane.smith@school.edu</td>
-                    <td class="action-links">
-                        <div class="action-buttons">
-                            <a href="#">View Profile</a>
-                            <a href="#">Edit</a>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>T002</td>
-                    <td>Mark Johnson</td>
-                    <td>Physics</td>
-                    <td>mark.johnson@school.edu</td>
-                    <td class="action-links">
-                        <div class="action-buttons">
-                            <a href="#">View Profile</a>
-                            <a href="#">Edit</a>
-                        </div>
-                    </td>
-                </tr>
+            <tbody id="teacher-table-body">
             </tbody>
         </table>
     </main>
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbw1t_ljhXOQsoN0mnpamRSqoPILBvPpmnvhkEw0l3_p8MJMGKg9cMyP3_M23__QxWgfXw/exec';
+        const teacherForm = document.getElementById('add-teacher-form');
+        const teacherTableBody = document.getElementById('teacher-table-body');
+        
+        async function fetchTeachers() {
+            try {
+                const response = await fetch(`${scriptURL}?action=getTeachers`);
+                const data = await response.json();
+                teacherTableBody.innerHTML = '';
+                data.teachers.forEach(teacher => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${teacher.EmployeeID}</td>
+                        <td>${teacher.TeacherName}</td>
+                        <td>${teacher.SubjectTaught}</td>
+                        <td>${teacher.Email}</td>
+                        <td class="action-links">
+                            <div class="action-buttons">
+                                <a href="#">View Profile</a>
+                                <a href="#">Edit</a>
+                            </div>
+                        </td>
+                    `;
+                    teacherTableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error fetching teacher data:', error);
+                teacherTableBody.innerHTML = '<tr><td colspan="5">Error loading teacher data.</td></tr>';
+            }
+        }
+        
+        teacherForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            formData.append('formType', 'teacher');
+            try {
+                const response = await fetch(scriptURL, {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+                if (result.status === 'success') {
+                    alert('Teacher added successfully!');
+                    teacherForm.reset();
+                    fetchTeachers();
+                } else {
+                    alert('Error adding teacher: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error!', error.message);
+                alert('An error occurred. Please try again.');
+            }
+        });
+        
+        fetchTeachers();
+    </script>
 </body>
 </html>

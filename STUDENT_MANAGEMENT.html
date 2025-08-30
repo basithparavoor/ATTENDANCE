@@ -29,15 +29,13 @@
         
         <div class="card">
             <h2>Add New Student</h2>
-            <form class="form-container">
-                <input type="text" placeholder="Student Name" required>
-                <input type="text" placeholder="Admission Number" required>
-                <select required>
-                    <option value="">Select Class</option>
-                    <option value="10">Grade 10</option>
-                    <option value="9">Grade 9</option>
-                </select>
-                <input type="email" placeholder="Email Address">
+            <form id="add-student-form" class="form-container">
+                <input type="text" id="student-name" name="StudentName" placeholder="Student Name" required>
+                <input type="text" id="admission-number" name="AdmissionNumber" placeholder="Admission Number" required>
+                <input type="text" id="student-class" name="Class" placeholder="Class" required>
+                <input type="email" id="student-email" name="Email" placeholder="Email Address">
+                <input type="text" id="student-username" name="Username" placeholder="Username" required>
+                <input type="password" id="student-password" name="Password" placeholder="Password" required>
                 <button type="submit">Add Student</button>
             </form>
         </div>
@@ -52,33 +50,66 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>S001</td>
-                    <td>John Doe</td>
-                    <td>Grade 10</td>
-                    <td>john.doe@school.edu</td>
-                    <td class="action-links">
-                        <div class="action-buttons">
-                            <a href="#">View Profile</a>
-                            <a href="#">Edit</a>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>S002</td>
-                    <td>Jane Doe</td>
-                    <td>Grade 9</td>
-                    <td>jane.doe@school.edu</td>
-                    <td class="action-links">
-                        <div class="action-buttons">
-                            <a href="#">View Profile</a>
-                            <a href="#">Edit</a>
-                        </div>
-                    </td>
-                </tr>
+            <tbody id="student-table-body">
             </tbody>
         </table>
     </main>
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbw1t_ljhXOQsoN0mnpamRSqoPILBvPpmnvhkEw0l3_p8MJMGKg9cMyP3_M23__QxWgfXw/exec';
+        const studentForm = document.getElementById('add-student-form');
+        const studentTableBody = document.getElementById('student-table-body');
+        
+        async function fetchStudents() {
+            try {
+                const response = await fetch(`${scriptURL}?action=getStudents`);
+                const data = await response.json();
+                studentTableBody.innerHTML = '';
+                data.students.forEach(student => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${student.AdmissionNumber}</td>
+                        <td>${student.StudentName}</td>
+                        <td>${student.Class}</td>
+                        <td>${student.Email}</td>
+                        <td class="action-links">
+                            <div class="action-buttons">
+                                <a href="#">View Profile</a>
+                                <a href="#">Edit</a>
+                            </div>
+                        </td>
+                    `;
+                    studentTableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error fetching student data:', error);
+                studentTableBody.innerHTML = '<tr><td colspan="5">Error loading student data.</td></tr>';
+            }
+        }
+        
+        studentForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            formData.append('formType', 'student');
+            try {
+                const response = await fetch(scriptURL, {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+                if (result.status === 'success') {
+                    alert('Student added successfully!');
+                    studentForm.reset();
+                    fetchStudents();
+                } else {
+                    alert('Error adding student: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error!', error.message);
+                alert('An error occurred. Please try again.');
+            }
+        });
+        
+        fetchStudents();
+    </script>
 </body>
 </html>
